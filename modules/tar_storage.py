@@ -4,6 +4,8 @@ import logging
 from datetime import datetime
 from StringIO import StringIO
 
+from modules.event import Event
+
 
 class TarStorage(object):
     """Stores added jpegs in archives"""
@@ -17,11 +19,13 @@ class TarStorage(object):
     def __init__(self, path):
         logging.debug("TarStorage init")
         self.path = os.path.realpath(path)
+        self.on_storage_closed = Event()
 
     def __del__(self):
         if not self.tar is None:
             logging.debug("File closed on exit")
             self.tar.close()
+            self.on_storage_closed(os.path.join(self.path, self.current_archive_name))
 
     def store(self, fileobj):
         if fileobj is None or not hasattr(fileobj, "read"):
@@ -41,6 +45,9 @@ class TarStorage(object):
     def _init_archive(self):
         archive_name = datetime.now().strftime(self.archive_name_format)
         if self.current_archive_name is None or not self.current_archive_name == archive_name:
+            if not self.tar is None:
+                self.tar.close()
+                self.on_storage_closed(os.path.join(self.path, self.current_archive_name))
             self.current_image_num = 1
             self.current_archive_name = archive_name
             filename = os.path.join(self.path, archive_name)
