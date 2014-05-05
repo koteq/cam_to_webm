@@ -12,12 +12,12 @@ def main():
         camera_image_url = f.read()
 
     pooler = CameraPooler(camera_image_url)
-    storage = TarStorage('archives')
+    storage = TarStorage(path='archives', no_response_file='no_signal.jpg')
 
+    pooler.on_frame.add_handler(storage.store)
     storage.on_storage_closed.add_handler(TarToWebmCompressor.compress)
-    pooler.on_response.add_handler(storage.store)
 
-    pooler.start_pooling_loop(interval=5.0)
+    pooler.start_pooling_loop(interval=2.4)  # 25 fps, 1 min real time = 1 sec video time
 
 
 if __name__ == "__main__":
