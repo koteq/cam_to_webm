@@ -6,21 +6,25 @@ by Peter Thatcher
 
 class Event(object):
     def __init__(self):
-        self.handlers = set()
+        self.handlers = []
 
     def add_handler(self, handler):
-        self.handlers.add(handler)
+        self.handlers.append(handler)
         return self
 
     def remove_handler(self, handler):
         try:
             self.handlers.remove(handler)
         except:
-            raise ValueError("Handler not found.")
+            raise ValueError("Handler not found")
         return self
 
-    def fire(self, *args, **kargs):
+    def fire(self, *args):
         for handler in self.handlers:
-            handler(*args, **kargs)
+            override_args = handler(*args)
+            if override_args is not None:
+                if type(override_args) is not tuple:
+                    raise ValueError("Handler must return tuple")
+                args = override_args
 
     __call__ = fire
