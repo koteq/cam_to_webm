@@ -10,11 +10,11 @@ from threading import Thread
 class TarToWebmCompressor(object):
     @staticmethod
     def compress(filename):
-        thread = Thread(target=TarToWebmCompressor._compress_non_blocking, args=(filename,))
+        thread = Thread(target=TarToWebmCompressor._compress, args=(filename,))
         thread.start()
 
     @staticmethod
-    def _compress_non_blocking(filename):
+    def _compress(filename):
         # extract tar
         tmp_dir = tempfile.mkdtemp()
         try:

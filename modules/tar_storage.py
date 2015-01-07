@@ -11,7 +11,7 @@ class TarStorage(object):
     tar = None
     bufsize = 1048576  # 1Mb
     no_response_num = 0
-    max_no_response_frames = 72  # 3 seconds
+    max_no_response_frames = 60  # 3 seconds
     current_file_num = 1
     current_archive_name = None
     file_name_format = "%04d.jpg"

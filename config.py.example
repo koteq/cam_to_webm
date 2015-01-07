@@ -1,0 +1,5 @@
+import os
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+CAM1_URL = 'http://user:pass@host:port/path/to/image.jpg'
+CAM2_URL = 'http://user:pass@host:port/path/to/image.jpg'
